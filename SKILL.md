@@ -80,6 +80,29 @@ description: |
 ### scripts/check_task.py
 查询单个任务状态和支付信息
 
+## 配置定时检查
+
+### 1. 设置环境变量
+```bash
+export LOUDY_API_KEY="你的API Key"
+```
+
+### 2. 配置 Cron 定时检查
+```bash
+# 添加定时任务（每5分钟检查一次）
+echo "*/5 * * * * /path/to/scripts/cron_check.sh" | crontab -
+```
+
+### 3. 配置 Heartbeat 通知
+在 HEARTBEAT.md 中添加：
+```
+## Loudy.ai 任务检查
+检查 /root/.openclaw/workspace/loudy_has_new.txt 是否存在：
+- 如果存在 → 读取 /root/.openclaw/workspace/loudy_tasks.json 内容
+- 发送消息通知用户
+- 删除 /root/.openclaw/workspace/loudy_has_new.txt
+```
+
 ## 注意事项
 
 - 任务有截止时间 (activityEnd)，需在截止前提交
