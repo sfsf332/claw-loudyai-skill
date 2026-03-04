@@ -48,10 +48,8 @@ def main():
         print(f"截止: {p.get('activityEnd')}")
         print(f"简介: {p.get('brief')}")
         pool_id = p.get('id')
-        brief_link = p.get('briefLink', '')
-        if brief_link:
-            brief_link = f"{brief_link}{'?' if '?' not in brief_link else '&'}poolId={pool_id}"
-        print(f"链接: {brief_link}")
+        loudy_link = f"https://loudy.ai?poolId={pool_id}"
+        print(f"链接: {loudy_link}")
         print(f"---")
 
 if __name__ == "__main__":
