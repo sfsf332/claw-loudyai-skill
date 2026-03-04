@@ -40,10 +40,8 @@ def main():
     
     print(f"FOUND {len(pools)} TASK(S):")
     for p in pools:
-        print(f"ID: {p.get('id')}")
         print(f"赞助方: {p.get('sponsor')}")
         print(f"奖金: {p.get('price')}")
-        print(f"管理人: {p.get('curator')}")
         print(f"分销方式: {p.get('distribution')}")
         print(f"平台: {p.get('platform')}")
         print(f"开始: {p.get('activityStart')}")
