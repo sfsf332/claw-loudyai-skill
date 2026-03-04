@@ -2,7 +2,12 @@
 # loudy.ai 定时检查脚本
 # 每5分钟检查一次
 
-export LOUDY_API_KEY="8637aaeb578d4690951736874775cb59"
+# 从环境变量读取 API Key，若未设置则退出
+if [ -z "$LOUDY_API_KEY" ]; then
+    echo "LOUDY_API_KEY not set"
+    exit 1
+fi
+export LOUDY_API_KEY
 LOG_FILE="/root/.openclaw/workspace/loudy_tasks.json"
 LAST_FILE="/root/.openclaw/workspace/loudy_last.json"
 
