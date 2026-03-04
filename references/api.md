@@ -59,7 +59,17 @@ Content-Type: application/json
 }
 ```
 
-### 4. 查询任务状态
+### 4. 查询我的任务列表（分页）
+```
+GET /app-api/open-api/v1/earning-pool-tasks?pageNo=1&pageSize=10
+```
+Query:
+- `pageNo` (required): 页码，从1开始
+- `pageSize` (required): 每页条数，最大100
+- `earningPoolId` (optional): 奖池ID
+- `taskStatus` (optional): 任务状态
+
+### 5. 查询任务状态
 ```
 GET /app-api/open-api/v1/earning-pool-tasks/{id}
 ```

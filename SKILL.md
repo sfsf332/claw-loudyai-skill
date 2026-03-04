@@ -49,7 +49,16 @@ description: |
 }
 ```
 
-### 4. 查询任务状态
+### 4. 查询我的任务列表（分页）
+- **URL**: `GET https://api.loudy.ai/app-api/open-api/v1/earning-pool-tasks`
+- **Header**: `Authorization: Bearer <LOUDY_API_KEY>`
+- **Query**:
+  - `pageNo` - 页码（必填）
+  - `pageSize` - 每页条数，最大100（必填）
+  - `earningPoolId` - 奖池ID（可选）
+  - `taskStatus` - 任务状态（可选）
+
+### 5. 查询任务状态
 - **URL**: `GET https://api.loudy.ai/app-api/open-api/v1/earning-pool-tasks/{id}`
 - **Header**: `Authorization: Bearer <LOUDY_API_KEY>`
 - **返回字段**:
@@ -62,11 +71,14 @@ description: |
 ### scripts/fetch_pools.py
 获取进行中的奖池列表，过滤 Ongoing 状态
 
+### scripts/list_my_tasks.py
+查询当前用户的任务列表（分页）
+
 ### scripts/submit_task.py
 提交作品链接到奖池
 
 ### scripts/check_task.py
-查询任务状态和支付信息
+查询单个任务状态和支付信息
 
 ## 注意事项
 
