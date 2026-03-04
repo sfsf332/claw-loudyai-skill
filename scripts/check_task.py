@@ -25,7 +25,7 @@ def check_task_status(task_id: int):
     """
     url = f"{API_BASE}/earning-pool-tasks/{task_id}"
     headers = {
-        "Authorization": f"Bearer {LOUDY_API_KEY}",
+        "X-API-Key": LOUDY_API_KEY,
         "Content-Type": "application/x-www-form-urlencoded"
     }
     

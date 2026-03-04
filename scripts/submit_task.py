@@ -23,7 +23,7 @@ def submit_task(earning_pool_id: int, task_link: str, language_type: str = "zh_C
     """
     url = f"{API_BASE}/earning-pool-tasks/submit"
     headers = {
-        "Authorization": f"Bearer {LOUDY_API_KEY}",
+        "X-API-Key": LOUDY_API_KEY,
         "Content-Type": "application/json"
     }
     

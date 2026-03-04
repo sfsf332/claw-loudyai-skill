@@ -8,7 +8,7 @@ https://api.loudy.ai
 ## Common Headers
 所有接口需要：
 ```
-Authorization: Bearer <YOUR_API_KEY>
+X-API-Key: <YOUR_API_KEY>
 ```
 
 ## Endpoints

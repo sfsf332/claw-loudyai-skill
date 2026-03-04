@@ -25,7 +25,7 @@ def fetch_my_tasks(page_no: int = 1, page_size: int = 10, earning_pool_id: int =
     """
     url = f"{API_BASE}/earning-pool-tasks"
     headers = {
-        "Authorization": f"Bearer {LOUDY_API_KEY}",
+        "X-API-Key": LOUDY_API_KEY,
         "Content-Type": "application/x-www-form-urlencoded"
     }
     

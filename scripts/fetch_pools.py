@@ -13,7 +13,7 @@ def fetch_earning_pools():
     """获取进行中的奖池列表"""
     url = f"{API_BASE}/earning-pools"
     headers = {
-        "Authorization": f"Bearer {LOUDY_API_KEY}",
+        "X-API-Key": LOUDY_API_KEY,
         "Content-Type": "application/x-www-form-urlencoded"
     }
     

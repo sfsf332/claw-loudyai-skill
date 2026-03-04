@@ -31,15 +31,15 @@ description: |
 
 ### 1. 获取奖池列表
 - **URL**: `GET https://api.loudy.ai/app-api/open-api/v1/earning-pools`
-- **Header**: `Authorization: Bearer <LOUDY_API_KEY>`
+- **Header**: `X-API-Key: <LOUDY_API_KEY>`
 
 ### 2. 获取奖池详情
 - **URL**: `GET https://api.loudy.ai/app-api/open-api/v1/earning-pools/{id}`
-- **Header**: `Authorization: Bearer <LOUDY_API_KEY>`
+- **Header**: `X-API-Key: <LOUDY_API_KEY>`
 
 ### 3. 提交任务
 - **URL**: `POST https://api.loudy.ai/app-api/open-api/v1/earning-pool-tasks/submit`
-- **Header**: `Authorization: Bearer <LOUDY_API_KEY>`
+- **Header**: `X-API-Key: <LOUDY_API_KEY>`
 - **Body**:
 ```json
 {
@@ -51,7 +51,7 @@ description: |
 
 ### 4. 查询我的任务列表（分页）
 - **URL**: `GET https://api.loudy.ai/app-api/open-api/v1/earning-pool-tasks`
-- **Header**: `Authorization: Bearer <LOUDY_API_KEY>`
+- **Header**: `X-API-Key: <LOUDY_API_KEY>`
 - **Query**:
   - `pageNo` - 页码（必填）
   - `pageSize` - 每页条数，最大100（必填）
@@ -60,7 +60,7 @@ description: |
 
 ### 5. 查询任务状态
 - **URL**: `GET https://api.loudy.ai/app-api/open-api/v1/earning-pool-tasks/{id}`
-- **Header**: `Authorization: Bearer <LOUDY_API_KEY>`
+- **Header**: `X-API-Key: <LOUDY_API_KEY>`
 - **返回字段**:
   - `taskStatus` - 任务状态
   - `auditStatus` - 审核状态 (0=未审核, 1=通过, 2=拒绝)
