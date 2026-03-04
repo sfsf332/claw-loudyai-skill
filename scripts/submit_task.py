@@ -36,7 +36,7 @@ def submit_task(earning_pool_id: int, task_link: str, language_type: str = "zh_C
     response = requests.post(url, headers=headers, json=payload)
     data = response.json()
     
-    if data.get("code") != 200:
+    if data.get("code") != 0 and data.get("code") != 200:
         print(f"Error: {data.get('msg')}")
         return None
     

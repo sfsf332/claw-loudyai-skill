@@ -32,7 +32,7 @@ def check_task_status(task_id: int):
     response = requests.get(url, headers=headers)
     data = response.json()
     
-    if data.get("code") != 200:
+    if data.get("code") != 0 and data.get("code") != 200:
         print(f"Error: {data.get('msg')}")
         return None
     

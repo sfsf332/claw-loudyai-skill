@@ -42,7 +42,7 @@ def fetch_my_tasks(page_no: int = 1, page_size: int = 10, earning_pool_id: int =
     response = requests.get(url, headers=headers, params=params)
     data = response.json()
     
-    if data.get("code") != 200:
+    if data.get("code") != 0 and data.get("code") != 200:
         print(f"Error: {data.get('msg')}")
         return None
     
