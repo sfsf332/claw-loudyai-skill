@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """
-获取进行中的奖池列表
+检查奖池并通知用户
 """
 import requests
 import json
 import os
+import sys
 
 API_BASE = "https://api.loudy.ai/app-api/open-api/v1"
 LOUDY_API_KEY = os.environ.get("LOUDY_API_KEY", "")
@@ -19,6 +20,7 @@ def fetch_earning_pools():
     
     response = requests.get(url, headers=headers)
     data = response.json()
+    
     if data.get("code") != 0 and data.get("code") != 200:
         print(f"Error: {data.get('msg')}")
         return []
@@ -31,7 +33,18 @@ def fetch_earning_pools():
 
 def main():
     pools = fetch_earning_pools()
-    print(json.dumps(pools, indent=2, ensure_ascii=False))
+    
+    if not pools:
+        print("NO_TASKS")
+        sys.exit(0)
+    
+    print(f"FOUND {len(pools)} TASK(S):")
+    for p in pools:
+        print(f"ID: {p.get('id')}")
+        print(f"赞助方: {p.get('sponsor')}")
+        print(f"奖金: {p.get('price')}")
+        print(f"截止: {p.get('activityEnd')}")
+        print(f"---")
 
 if __name__ == "__main__":
     main()
