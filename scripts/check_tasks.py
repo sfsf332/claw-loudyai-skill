@@ -44,6 +44,7 @@ def main():
         print(f"赞助方: {p.get('sponsor')}")
         print(f"奖金: {p.get('price')}")
         print(f"截止: {p.get('activityEnd')}")
+        print(f"链接: {p.get('briefLink')}")
         print(f"---")
 
 if __name__ == "__main__":
