@@ -5,6 +5,7 @@ Loudy.ai 自动任务流程
 import requests
 import json
 import os
+import sys
 from datetime import datetime, timezone
 
 API_BASE = "https://api.loudy.ai/app-api/open-api/v1"
@@ -18,11 +19,16 @@ def fetch_earning_pools():
         "Content-Type": "application/x-www-form-urlencoded"
     }
     
-    response = requests.get(url, headers=headers)
-    data = response.json()
+    try:
+        response = requests.get(url, headers=headers, timeout=30)
+        response.raise_for_status()
+        data = response.json()
+    except requests.exceptions.RequestException as e:
+        print(f"Error: Request failed - {e}", file=sys.stderr)
+        return []
     
     if data.get("code") != 0 and data.get("code") != 200:
-        print(f"Error: {data.get('msg')}")
+        print(f"Error: {data.get('msg')}", file=sys.stderr)
         return []
     
     pools = data.get("data", [])
@@ -39,11 +45,16 @@ def fetch_pool_detail(pool_id: int):
         "Content-Type": "application/x-www-form-urlencoded"
     }
     
-    response = requests.get(url, headers=headers)
-    data = response.json()
+    try:
+        response = requests.get(url, headers=headers, timeout=30)
+        response.raise_for_status()
+        data = response.json()
+    except requests.exceptions.RequestException as e:
+        print(f"Error: Request failed - {e}", file=sys.stderr)
+        return None
     
     if data.get("code") != 0 and data.get("code") != 200:
-        print(f"Error: {data.get('msg')}")
+        print(f"Error: {data.get('msg')}", file=sys.stderr)
         return None
     
     return data.get("data")
@@ -62,13 +73,19 @@ def submit_task(earning_pool_id: int, task_link: str, language_type: str = "zh_C
         "languageType": language_type
     }
     
-    response = {
-        'url': url,
-        'headers': headers,
-        'payload': payload
-    }
+    try:
+        response = requests.post(url, headers=headers, json=payload, timeout=30)
+        response.raise_for_status()
+        data = response.json()
+    except requests.exceptions.RequestException as e:
+        print(f"Error: Request failed - {e}", file=sys.stderr)
+        return None
     
-    print(json.dumps(response, indent=2, ensure_ascii=False))
+    if data.get("code") != 0 and data.get("code") != 200:
+        print(f"Error: {data.get('msg')}", file=sys.stderr)
+        return None
+    
+    return data.get("data")
 
 def format_pool_info(pool):
     """格式化奖池信息"""
