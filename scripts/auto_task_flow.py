@@ -31,7 +31,7 @@ def fetch_earning_pools():
     
     return ongoing_pools
 
-def fetch_pool_detail(pool(pool_id: int):
+def fetch_pool_detail(pool_id: int):
     """获取奖池详情"""
     url = f"{API_BASE}/earning-pools/{pool_id}"
     headers = {
