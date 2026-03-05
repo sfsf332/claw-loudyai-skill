@@ -22,6 +22,6 @@ if [ -f "$LAST_FILE" ]; then
     fi
 fi
 
-# 有新任务或首次运行，保存并标记需要通知
+# 有新任务或或首次运行，保存并标记需要通知
 cp "$LOG_FILE" "$LAST_FILE"
 echo "NEW_TASKS" > /root/.openclaw/workspace/loudy_has_new.txt
