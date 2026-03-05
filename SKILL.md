@@ -1,30 +1,88 @@
 ---
 name: loudy-ai-auto-task
 description: |
-  自动从 loudy.ai 领取任务、写稿、发布推文并追踪任务状态。使用条件：
-  (1) 用户需要先配置 LOUDY_API_KEY 到 TOOLS.md
-  (2) 启动任务后会定时查询奖池、接受任务、提交推文、查询支付状态
-  (3) 适用于需要自动抢单并完成 X/Twitter 推文任务的场景
+  Loudy.ai 任务自动化工具 - 查询奖池、提交任务链接、追踪审核和支付状态。
+  重要说明：此工具仅与 loudy.ai API 交互，不包含 Twitter/X 自动发布功能。
+  使用条件：
+  (1) 用户需要先配置 LOUDY_API_KEY 环境变量
+  (2) 启动后会定时查询奖池、提交任务链接、查询审核和支付状态
+  (3) 适用于需要自动管理 loudy.ai 任务的场景
+metadata:
+  openclaw:
+    requires:
+      env:
+        - name: LOUDY_API_KEY
+          description: "Loudy.ai API Key"
+          required: true
 ---
 
 # Loudy.ai 自动任务 Skill
 
+## ⚠️ 安全警告
+
+- 🔐 **API Key 安全**：建议使用环境变量 `export LOUDY_API_KEY=你的密钥`，**不要**写入 TOOLS.md 或其他共享文件
+- 📝 **文件系统访问**：本工具会读写 `/root/.openclaw/workspace/` 目录下的文件
+- ⏰ **可选的 Cron 任务**：如需自动检查，需手动配置 cron 任务
+
 ## 快速开始
 
-1. **配置 API Key**: 在 TOOLS.md 中添加 `LOUDY_API_KEY`
-2. **启动任务**: 告诉 AI "帮我去 loudy.ai 接单"
-3. **自动执行**: AI 会自动轮询奖池、完成任务、提交推文
+### 1. 配置 API Key (推荐环境变量方式)
+
+```bash
+export LOUDY_API_KEY="你的API密钥"
+```
+
+⚠️ **注意**：不建议将密钥写入 TOOLS.md，避免意外泄露
+
+### 2. 启动任务
+
+告诉 AI：
+> "查看 loudy 可用奖池"
+
+### 3. 自动执行流程
+
+1. AI 展示可用奖池详情（包括要求、奖金、截止时间、详情页面链接）
+2. 你根据要求发布推文到 X/Twitter
+3. 将推文链接发送给 AI
+4. AI 自动提交到 loudy.ai
 
 ## 工作流程
 
 ```
 1. fetch_earning_pools() → 获取进行中的奖池列表
-2. 选择合适的奖池 → 获取详情
-3. 写推文 → 发布到 X/Twitter
-4. submit_task() → 提交作品链接
-5. 定时 check_task_status() → 查询任务是否被接受
+2. 展示奖池详情给用户 → 包括要求、奖金、截止时间、详情页面链接
+3. 提示用户根据要求发推文 → 用户手动发布到 X/Twitter
+4. 等待用户提供推文链接 → 用户把推文链接发给 AI
+5. submit_task() → 自动提交作品链接到 loudy.ai
+6. 定时 check_task_status() → 查询任务是否被接受
    ├─ 超时未接受 → 报告失败
    └─ 已接受 → 定时查询 payment/支付信息
+```
+
+## 用户交互流程示例
+
+### 步骤 1: 查看可用奖池
+```
+用户: "查看 loudy 可用奖池"
+AI: 调用 fetch_pools.py，展示奖池列表（包含详情页面链接）
+```
+
+### 步骤 2: 选择奖池并发推文
+```
+AI: 展示奖池详情和要求
+用户: 选择奖池，根据要求发布推文
+```
+
+### 步骤 3: 提交推文链接
+```
+用户: "提交推文链接 https://x.com/xxx/status/123 到奖池 3"
+AI: 调用 submit_task.py(3, "https://x.com/xxx/status/123")
+```
+
+### 步骤 4: 查询任务状态
+```
+用户: "查询任务状态"
+AI: 调用 check_task.py 查询审核和支付状态
 ```
 
 ## API 接口
@@ -80,20 +138,34 @@ description: |
 ### scripts/check_task.py
 查询单个任务状态和支付信息
 
-## 配置定时检查
+### scripts/auto_task_flow.py
+优化的任务流程脚本：
+1. 获取可用奖池列表
+2. 展示奖池详情（包括要求、奖金、截止时间）
+3. 显示 Loudy.ai 详情页面链接
+4. 等待用户提供推文链接
+5. 自动提交到 loudy.ai
+
+### scripts/check_tasks.py
+定时检查脚本，获取当前奖池并格式化输出
+
+### scripts/cron_check.sh
+Cron 定时任务脚本，每5分钟检查一次新任务
+
+## 配置定时检查（可选）
 
 ### 1. 设置环境变量
 ```bash
 export LOUDY_API_KEY="你的API Key"
 ```
 
-### 2. 配置 Cron 定时检查
+### 2. 配置 Cron 定时检查（可选）
 ```bash
 # 添加定时任务（每5分钟检查一次）
-echo "*/5 * * * * /path/to/scripts/cron_check.sh" | crontab -
+echo "*/5 * * * * /usr/lib/node_modules/openclaw/skills/loudy-ai-auto-task/scripts/cron_check.sh" | crontab -
 ```
 
-### 3. 配置 Heartbeat 通知
+### 3. 配置 Heartbeat 通知（可选）
 在 HEARTBEAT.md 中添加：
 ```
 ## Loudy.ai 任务检查
@@ -105,6 +177,9 @@ echo "*/5 * * * * /path/to/scripts/cron_check.sh" | crontab -
 
 ## 注意事项
 
-- 任务有截止时间 (activityEnd)，需在截止前提交
-- 提交后需等待审核 (auditStatus)
-- 建议设置定时检查间隔为 5-10 分钟
+- ⚠️ **API Key 安全**：建议使用环境变量 `export LOUDY_API_KEY=你的密钥`，**不要**写入 TOOLS.md 或其他共享文件
+- 📝 **文件系统访问**：本工具会读写 `/root/.openclaw/workspace/` 目录下的文件（如 `loudy_tasks.json`, `loudy_has_new.txt`）
+- ⏰ **可选的 Cron 任务**：如需自动检查，需手动配置 cron 任务（可选功能）
+- 🐦 **Twitter 功能说明**：本工具**不包含** Twitter/X 自动发布功能，用户需手动发布推文后提供链接
+- ⏳ **任务截止时间**：任务有截止时间 (activityEnd)，需在截止前提交
+- ✅ **审核流程**：提交后需等待审核 (auditStatus)，建议设置定时检查间隔为 5-10 分钟
